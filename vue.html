@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    
+	<title>Document</title>
+	<style>
+        .selected{
+            background: yellow;
+        }
+        .hide{
+        	display: none;
+        }
+        .selected-item{
+        	background: yellow;
+        }
+	</style>
+</head>
+<body>
+	<div id="app">
+		<ul class="tab">
+			<li v-for="item in res.extend.dayTimeAllow" :class="item.selected ? 'selected' : ''"@click="selectDay(item)">{{item.day}}</li>
+		</ul>
+		<div class="box">
+			<ul>
+				<li v-for="item in timesList" :class="item.allow == 1 ? 'selected' : ''"@click="selectTime(item)" >{{item.time}}</li>
+			</ul>
+		</div>
+	</div>
+	<script>
+	var vue = new Vue({
+			el:"#app",
+			data:{
+				res:{
+					extend:{
+						dayTimeAllow:[
+						{
+							times:[],
+						}
+					  ],
+					}
+				},
+				timesList:[],
+			},
+			mounted:function(){
+		       this.getData();
+			},
+			methods:{
+		      getData:function(){
+		      	var that = this;
+		      	var res ={
+		           "code": 100,
+		                "msg": "处理成功",
+		                "extend": {
+		                    "dayTimeAllow": [
+		                        {
+		                            "day": "2018-05-18",
+		                            "times": [
+		                                {
+		                                    "time": "11:00",
+		                                    "allow": 1
+		                                },
+		                                {
+		                                    "time": "12:00",
+		                                    "allow": 0
+		                                },
+		                                {
+		                                    "time": "13:00",
+		                                    "allow": 1
+		                                },
+		                                {
+		                                    "time": "14:00",
+		                                    "allow": 0
+		                                },
+		                                {
+		                                    "time": "15:00",
+		                                    "allow": 0
+		                                },
+		                                {
+		                                    "time": "16:00",
+		                                    "allow": 0
+		                                }
+		                            ]
+		                        },
+		                        {
+		                            "day": "2018-05-25",
+		                            "times": [
+		                                {
+		                                    "time": "11:00",
+		                                    "allow": 1
+		                                },
+		                                {
+		                                    "time": "11:00",
+		                                    "allow": 1
+		                                },
+		                                {
+		                                    "time": "11:00",
+		                                    "allow": 1
+		                                },
+		                                {
+		                                    "time": "11:00",
+		                                    "allow": 1
+		                                },
+		                                {
+		                                    "time": "11:00",
+		                                    "allow": 1
+		                                },
+		                                {
+		                                    "time": "11:00",
+		                                    "allow": 1
+		                                }
+		                            ]
+		                        }
+		                    ]
+		                }
+				};     
+				res.extend.dayTimeAllow.foreach(function(item,index){
+					if (index == 0) {
+						item.selected = true;
+					} else{
+						item.selected = false;
+					};
+				}); 
+				this.res = res;
+				this.timesList = res.extend.dayTimeAllow[0].times;
+		      },
+		      selectDay:function(i){
+		      	this.res.extend.dayTimeAllow.forEach(function(item){
+		      		item.selected = false;
+		      	})
+		      	i.selected = true;
+		      	var timesArr = i.times;
+		      	this.timesList = timesArr;
+		      },
+		      selectTime:function(i){
+                  if (i.allow == 1) {
+                  	alert("此时间被选中");
+                  	return;
+                  } else{
+                  	i.allow = 1;
+                  };
+		      }
+			},
+		})
+	</script>
+		</body>
+		</html>

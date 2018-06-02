@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.bootcss.com/jquery/3.2.0/jquery.min.js"></script>
+    
+	<title>Document</title>
+	<style>
+        .selected{
+            background: yellow;
+        }
+        .hide{
+        	display: none;
+        }
+        .selected-item{
+        	background: yellow;
+        }
+	</style>
+</head>
+<body>
+	<div id="app">
+		<ul class="tab">
+			<li class="selected"></li>
+		</ul>
+		<div class="box">
+			<ul>
+				<!-- <li class="selected" data-allow="1">11.00</li>
+				<li data-allow="0">12.00</li>
+				<li class="selected" data-allow="1">13.00</li>
+				<li data-allow="0">14.00</li>
+				<li data-allow="0">15.00</li>
+				<li data-allow="0">16.00</li> -->
+				<li></li>
+			</ul>
+		</div>
+	</div>
+	<script>
+      $(function(){
+      	var res={
+      		"code": 100,
+                "msg": "处理成功",
+                "extend": {
+                    "dayTimeAllow": [
+                        {
+                            "day": "2018-05-18",
+                            "times": [
+                                {
+                                    "time": "11:00",
+                                    "allow": 1
+                                },
+                                {
+                                    "time": "12:00",
+                                    "allow": 0
+                                },
+                                {
+                                    "time": "13:00",
+                                    "allow": 1
+                                },
+                                {
+                                    "time": "14:00",
+                                    "allow": 0
+                                },
+                                {
+                                    "time": "15:00",
+                                    "allow": 0
+                                },
+                                {
+                                    "time": "16:00",
+                                    "allow": 0
+                                }
+                            ]
+                        },
+                        {
+                            "day": "2018-05-25",
+                            "times": [
+                                {
+                                    "time": "11:00",
+                                    "allow": 1
+                                },
+                                {
+                                    "time": "11:00",
+                                    "allow": 1
+                                },
+                                {
+                                    "time": "11:00",
+                                    "allow": 1
+                                },
+                                {
+                                    "time": "11:00",
+                                    "allow": 1
+                                },
+                                {
+                                    "time": "11:00",
+                                    "allow": 1
+                                },
+                                {
+                                    "time": "11:00",
+                                    "allow": 1
+                                }
+                            ]
+                        }
+                    ]
+                }
+      	}
+      	var selectedTabStr="";
+      	var norTabStr = "";
+      	var firstSelectedTimesStr = "";
+      	for (var i = 0; i < res.extend.dayTimeAllow.length; i++) {
+      		if (i==0) {
+      			selectedTabStr+='<li class="selected">'+res.extend.dayTimeAllow[i].day+'</li>';
+      			$(".tab").append(selectedTabStr)
+     			for (var j = 0; j < res.extend.dayTimeAllow[i].times.length; j++) {
+      				if (res.extend.dayTimeAllow[i].times==0) {
+      					firstSelectedTimesStr+='<li data-allow="'+res.extend.dayTimeAllow[i].times[j].allow+'">'+res.extend.dayTimeAllow[i].times[j].time+'</li>'
+      				} 
+      					else{
+      						firstSelectedTimesStr+='<li class="selected data-allow="'+res.extend.dayTimeAllow[i].times[j].allow+'">'+res.extend.dayTimeAllow[i].times[j].time+'</li>'
+      					};
+      				}
+      			}else{
+      				norTabStr+='<li>'+res.extend.dayTimeAllow[i].day+'</li>'
+      		}
+      	}
+      	$(".tab").append(norTabStr)
+      	$(".box ul").html(firstSelectedTimesStr)
+
+      	$("body").on("click",".tab li",function(){
+           $(this).addClass(".selected").siblings().removeClass("selected");
+           var index= $(this).index();
+           var times = res.extend.dayTimeAllow[index].times;
+           var timesLength = times.length;
+           var selectStr="";
+           for (var l = 0; l < timesLength; l++) {
+           	if (times[l].allow == 0) {
+           		selectStr+='<li data-allow="'+times[l].allow+'">'+times[l].time+'</li>'
+           	} else{
+           		selectStr+='<li class="selected" data-allow="'+times[l].allow+'"'+times[l].time+'<li>'
+           	}
+           }
+           $(".box ul").html(selectStr);
+      	});
+
+      	$("body").on("click",".tab ul li",function(){
+      		var that  = $(this);
+            var allow = that.data("allow");
+            if (that.hasClass("selected")) {
+            	alert("已经被预约");
+            	return false;
+            } else{
+            	that.addClass("selected");
+            };
+      	})
+    })
+	</script>
+</body>
+</html>
